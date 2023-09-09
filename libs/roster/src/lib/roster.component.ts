@@ -37,7 +37,7 @@ export class RosterComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe((isLoggedIn) => {
         this.isAuthenticated = isLoggedIn;
-        this.getArticles();
+        this.getRoster();
       });
   }
 
@@ -51,6 +51,9 @@ export class RosterComponent implements OnInit {
     } else {
       this.setListTo('ALL');
     }
+  }
+  getRoster() {
+    this.rosterStore.getRoster();
   }
 
   setListTag(tag: string) {

@@ -9,4 +9,11 @@ export class RosterService {
   getTags(): Observable<{ tags: string[] }> {
     return this.apiService.get('/tags');
   }
+
+  getRoster(): Observable<{
+    tags: string[] | undefined;
+    roster: string[];
+  }> {
+    return this.apiService.get('/roster');
+  }
 }
