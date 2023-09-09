@@ -8,6 +8,7 @@ import { Article } from './article.entity';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { Comment } from './comment.entity';
 import { CreateArticleDto, CreateCommentDto } from './dto';
+import { Tag } from '../tag/tag.entity';
 
 @Injectable()
 export class ArticleService {
@@ -158,6 +159,17 @@ export class ArticleService {
     // Split the tags here
     const tagsArray = (dto.tagList as unknown as string).split(',').map((tag) => tag.trim());
     article.tagList = tagsArray;
+
+    // Handle popular tags here
+    const popularTagsArray = tagsArray || [];
+
+    for (let tagName of popularTagsArray) {
+      const tag = await this.em.findOne(Tag, { tag: tagName });
+      if (!tag) {
+        const newTag = this.em.create(Tag, { tag: tagName });
+        await this.em.persistAndFlush(newTag);
+      }
+    }
 
     user?.articles.add(article);
     await this.em.flush();
